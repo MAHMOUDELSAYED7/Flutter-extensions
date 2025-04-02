@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 extension NavigationExtensions on BuildContext {
   // Push a new page onto the stack
-  void navigateTo(Widget page) =>
+  void push(Widget page) =>
       Navigator.of(this).push(MaterialPageRoute(builder: (_) => page));
 
   // Push a named route onto the stack
@@ -11,13 +11,17 @@ extension NavigationExtensions on BuildContext {
       Navigator.of(this).pushNamed<T>(routeName, arguments: arguments);
 
   // Replace the current route with a new one
-  Future<T?> replaceWith<T, TO>(Widget page) => Navigator.of(this)
-      .pushReplacement(MaterialPageRoute(builder: (_) => page));
+  Future<T?> pushReplacement<T, TO>(Widget page) => Navigator.of(
+    this,
+  ).pushReplacement(MaterialPageRoute(builder: (_) => page));
 
   // Replace the current route with a named route
-  Future<T?> replaceWithNamed<T, TO>(String routeName, {Object? arguments}) =>
-      Navigator.of(this)
-          .pushReplacementNamed<T, TO>(routeName, arguments: arguments);
+  Future<T?> pushReplacementNamed<T, TO>(
+    String routeName, {
+    Object? arguments,
+  }) => Navigator.of(
+    this,
+  ).pushReplacementNamed<T, TO>(routeName, arguments: arguments);
 
   // Pop the current route off the stack
   void back() => Navigator.of(this).pop();
@@ -28,19 +32,25 @@ extension NavigationExtensions on BuildContext {
 
   // Pop the current route and push a new route
   Future<T?> popAndPushNamed<T, TO>(String routeName, {Object? arguments}) =>
-      Navigator.of(this)
-          .popAndPushNamed<T, TO>(routeName, arguments: arguments);
+      Navigator.of(
+        this,
+      ).popAndPushNamed<T, TO>(routeName, arguments: arguments);
 
   // Push a new route and remove all previous routes
   Future<T?> pushAndRemoveUntil<T>(Widget page, RoutePredicate predicate) =>
-      Navigator.of(this).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => page), predicate);
+      Navigator.of(
+        this,
+      ).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => page), predicate);
 
   // Push a named route and remove all previous routes
   Future<T?> pushNamedAndRemoveUntil<T>(
-          String routeName, RoutePredicate predicate, {Object? arguments}) =>
-      Navigator.of(this).pushNamedAndRemoveUntil<T>(routeName, predicate,
-          arguments: arguments);
+    String routeName, {
+    Object? arguments,
+  }) => Navigator.of(this).pushNamedAndRemoveUntil<T>(
+    routeName,
+     (route) => false,
+    arguments: arguments,
+  );
 
   // Try to pop the route; returns true if successful, otherwise false
   Future<bool> maybePop() => Navigator.of(this).maybePop();
